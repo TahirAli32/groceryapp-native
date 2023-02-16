@@ -1,7 +1,8 @@
 const baseUrl = "https://smit-hackathon-backend.cyclic.app"
 
 const colors = {
-  primary: "#FC6D3F", // orange
+  // primary: "#FC6D3F", // orange
+  primary: "#61B846", // green
   secondary: "#CDCDD2",   // gray
 }
 

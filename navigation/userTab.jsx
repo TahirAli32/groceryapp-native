@@ -12,10 +12,6 @@ const Tabs = () => {
       screenOptions={{
         // tabBarShowLabel: false,
         headerShown: false,
-        style:{
-          backgroundColor: 'transparent',
-          borderTopWidth: 0
-        }
       }}
     >
       <Tab.Screen

@@ -1,54 +1,30 @@
 import { useState, useEffect } from 'react'
-import { View, Text, ScrollView, TextInput, StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native'
-import { icons, images } from '../constants'
-import {constant} from '../constants/constant'
+import { View, Text, ScrollView, TextInput, StyleSheet, TouchableOpacity, Image, FlatList, ToastAndroid, Pressable } from 'react-native'
+import { icons, images, baseUrl } from '../constants'
 import axios from 'axios'
 
 const Home = ({navigation}) => {
 
-  const [category, setCategory] = useState([]);
-  const [products, setProducts] = useState([]);
+  const [category, setCategory] = useState([])
+  const [products, setProducts] = useState([])
+
   useEffect(() => {
     const fetchCategories = async () => {
-      const res = await axios.get(`${constant.baseUrl}/api/category`);
+      const res = await axios.get(`${baseUrl}/api/category`)
       setCategory(res.data.categories)
-    };
-    fetchCategories();
+    }
+    fetchCategories()
 
     const fetchProducts = async () => {
-      const res = await axios.get(`${constant.baseUrl}/api/product`);
+      const res = await axios.get(`${baseUrl}/api/product`)
       setProducts(res.data.products)
-    };
-    fetchProducts();
-  }, []);
+    }
+    fetchProducts()
+  }, [])
 
-  const renderProducts = ({item}) => {
-    return (
-      <View style={styles.productContainer}>
-        <View style={styles.productContent}>
-          <Image
-            style={styles.productImg}
-            source={{uri: `${item.productImg}`}}
-          />
-          <View style={styles.productBar}>
-            <Text style={styles.productHeading}>{item.productName}</Text>
-            <Text style={styles.productDesc}>{item.productDesc}</Text>
-          </View>
-        </View>
-        <View style={styles.priceCon}>
-          <Text style={styles.price}>
-            {item.price}-per {item.unit}
-          </Text>
-          <TouchableOpacity style={styles.Add}>
-            <Text style={styles.AddText}>+</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  };
   const renderItem = ({item}) => {
     return (
-      <View style={styles.categories}>
+      <Pressable onPressIn={()=> addToCart(item.categoryName)}>
         <View style={styles.categoriesContent}>
           <Image
             style={styles.categoryImage}
@@ -58,180 +34,213 @@ const Home = ({navigation}) => {
           />
           <Text style={styles.categoryName}>{item.categoryName}</Text>
         </View>
-      </View>
-    );
-  };
+      </Pressable>
+    )
+  }
+
+  const addToCart = (itemID) => {
+    ToastAndroid.show(itemID, ToastAndroid.SHORT)
+  }
 
   return (
     <>
       <View style={styles.container}>
-        <View>
-          <Text style={styles.heading}>SAYLANI WELFARE</Text>
-          <Text style={styles.subheading}>DISCOUNT STORE</Text>
+        <View style={styles.header}>
+          <View>
+            <Text style={styles.heading}>SAYLANI WELFARE</Text>
+            <Text style={styles.subheading}>DISCOUNT STORE</Text>
+          </View>
+          <View>
+            <Pressable onPress={() => navigation.navigate('Cart')}>
+              <Image
+                style={{ width: 25, height: 25, alignContent: 'center' }}
+                source={icons.basket}
+              />
+              </Pressable>
+          </View>
         </View>
-        <View>
-        <Image
-            style={{width: 25, height: 25, alignContent: 'center'}}
-            source={icons.basket}
-          />
-        </View>
+        <ScrollView>
+          <View style={{paddingHorizontal: 15}}>
+            <View style={styles.banner}>
+              <Image source={images.grocery} />
+            </View>
+            <View style={styles.inputView}>
+              <Image
+                style={{ width: 20, height: 20, marginRight: 10 }}
+                source={icons.search_icon}
+              />
+              <TextInput placeholder="Search by Product Name" style={styles.inputBox} />
+            </View>
+            <View style={styles.categoryView}>
+              <Text style={styles.h1}>Shop By Category</Text>
+              <FlatList
+                data={category}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                keyExtractor={item => `${item._id}`}
+                renderItem={renderItem}
+                style={styles.categoryList}
+              />
+            </View>
+            <View>
+              {products?.map(item => (
+                <View style={styles.productContainer} key={item._id}>
+                  <View style={styles.left}>
+                    <Image
+                      style={styles.productImg}
+                      source={{ uri: `${item.productImg}` }}
+                    />
+                    <View>
+                      <Text style={styles.productHeading}>
+                        {item.productName}
+                      </Text>
+                      <Text style={{color: '#808080'}}>
+                        {item.productDesc}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.right}>
+                    <Text style={styles.price}>
+                      {item.price} - per {item.unit}
+                    </Text>
+                    <TouchableOpacity 
+                      style={styles.btn}
+                      onPressIn={() => addToCart(item._id)}
+                    >
+                      <Text style={styles.btnText}>+</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              ))}
+            </View>
+          </View>
+        </ScrollView>
       </View>
-      <ScrollView>
-        <View style={styles.banner}>
-          <Image source={images.grocery} style={styles.bannerImage} />
-        </View>
-        <View>
-          <TextInput placeholder="Search Here...." style={styles.input} />
-        </View>
-        <View>
-          <Text style={styles.h1}>Shop By Category</Text>
-        </View>
-        <View>
-          <FlatList
-            data={category}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={item => `${item._id}`}
-            renderItem={renderItem}
-            style={styles.catList}
-          />
-        </View>
-        <View>
-          <FlatList
-            data={products}
-            vertical
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={item => `${item._id}`}
-            renderItem={renderProducts}
-            style={styles.catList}
-          />
-        </View>
-      </ScrollView>
     </>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: '#fff',
+  },
+  header:{
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingTop: 15,
+    borderBottomColor: '#E8E8E8',
+    borderBottomWidth: 1,
+    paddingTop: 10,
     paddingBottom: 5,
-    paddingLeft: 15,
-    paddingRight: 15,
+    paddingHorizontal: 15,
   },
-  categoriesContent: {
-    alignItems: 'center',
-  },
-
   heading: {
     color: '#61B846',
-    fontSize: 18,
-    fontWeight: '700',
+    fontSize: 22,
+    fontWeight: 700,
+    letterSpacing: .5
   },
   subheading: {
     color: '#024F9D',
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 14,
+    fontWeight: 700,
+    letterSpacing: .3
   },
-  input: {
-    marginLeft: 20,
-    marginRight: 20,
+  banner:{
+    alignItems: 'center',
+    marginTop: 10,
+    marginBottom: 15,
+  },
+  inputView: {
+    flexDirection: 'row',
+    alignItems: 'center',
     borderRadius: 25,
     backgroundColor: '#E8E8E8',
-    marginTop: 5,
-    padding: 5,
+    paddingHorizontal: 20,
+  },
+  inputBox: {
     color: '#6d6e71',
-    paddingLeft: 20,
+    fontSize: 17,
+    paddingRight: 30,
   },
-  cart: {
-    color: '#000000',
-  },
-
-  bannerImage: {
-    marginLeft: 17,
-    marginRight: 18,
-    width: 326,
-    height: 258,
-    resizeMode: 'contain',
+  categoryView:{
+    flexDirection: 'column',
+    marginVertical: 15,
   },
   h1: {
     color: '#000',
     fontWeight: '700',
     fontSize: 18,
-    paddingLeft: 25,
-    paddingRight: 22,
-    paddingTop: 15,
+  },
+  categoryList:{
+    paddingHorizontal: 2,
+    marginTop: 10,
+  },
+  categoriesContent: {
+    alignItems: 'center',
+    paddingRight: 15,
   },
   categoryImage: {
     width: 120,
     height: 80,
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     borderColor: '#9cd38b',
-    borderWidth: 1,
+    borderWidth: 2,
     borderRadius: 15,
-  },
-
-  categories: {
-    paddingLeft: 10,
-    paddingRight: 10,
-    marginLeft: 10,
-    marginTop: 15,
   },
   categoryName: {
     color: 'green',
     fontWeight: '600',
     fontSize: 14,
   },
-  productImg: {
-    width: 70,
-    height: 70,
-    borderRadius: 7,
-  },
   productContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 10,
-    padding: 5,
+    marginTop: 5,
+    paddingVertical: 15,
   },
-  productContent: {
+  left: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 15,
+    width: '50%'
+  },
+  productImg: {
+    width: 115,
+    height: 70,
+    borderRadius: 10,
+    resizeMode: 'contain'
   },
   productHeading: {
     color: '#000',
     fontWeight: 'bold',
     fontSize: 16,
   },
-  productBar: {
-    marginLeft: 10,
-  },
-  productDesc: {
-    color: '#808080',
+  right: {
+    alignItems: 'flex-end',
+    justifyContent: 'space-around'
   },
   price: {
     color: '#000',
     fontWeight: '700',
   },
-  priceCon: {
-    paddingRight: 7,
-  },
-  Add: {
-    marginTop: 10,
-    width: 60,
-    marginLeft: 20,
+  btn: {
+    width: 55,
+    height: 35,
     backgroundColor: '#59b300',
     justifyContent: 'center',
     alignContent: 'center',
-    padding: 8,
-    borderRadius: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-  AddText: {
-    fontWeight: 'bold',
-    fontSize: 18,
-    textAlign: 'center',
+  btnText: {
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: 600,
   },
-});
+})
 
- export default Home
+export default Home

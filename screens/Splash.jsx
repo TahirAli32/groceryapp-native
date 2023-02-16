@@ -1,12 +1,13 @@
-import React from 'react';
-import {Text, Image, View, StyleSheet, TouchableOpacity} from 'react-native';
-import { images } from '../constants'
+import React from 'react'
+import {Text, Image, View, StyleSheet, TouchableOpacity} from 'react-native'
+// import { images } from '../constants'
+
 const Splash = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
         <View style={styles.ImageCon}>
-          <Image style={styles.logo} source={images.logo} />
+          {/* <Image style={styles.logo} source={images.logo} /> */}
         </View>
         <View style={styles.textCon}>
           <Text style={styles.heading}>SAYLANI WELFARE</Text>
@@ -17,15 +18,14 @@ const Splash = ({navigation}) => {
         <TouchableOpacity
           style={styles.button}
            onPress={() => navigation.navigate("Login")}
-
           >
           <Text style={styles.btnText}>Get Started</Text>
         </TouchableOpacity>
        
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {

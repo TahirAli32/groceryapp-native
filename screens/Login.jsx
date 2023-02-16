@@ -6,29 +6,28 @@ import {
   TouchableOpacity,
   View,
   ToastAndroid
-} from 'react-native';
-import React, {useState} from 'react';
-import axios from 'axios';
-import {constant} from '../constants/constant'
+} from 'react-native'
+import { useState } from 'react'
+import axios from 'axios'
+import { baseUrl } from '../constants'
 
 const Login = ({navigation}) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   const handleLogin = async () => {
+    ToastAndroid.show('Checking Credentials', ToastAndroid.SHORT)
     const body = {
       email,
       password,
     };
-    const res = await axios.post(`${constant.baseUrl}/api/auth/login`, body);
+    const res = await axios.post(`${baseUrl}/api/auth/login`, body);
     if(res.data.success){
       ToastAndroid.show('Login Successfull', ToastAndroid.SHORT)
       if(res.data.isAdmin){
-        // navigation.navigate('AdminAllProducts')
         navigation.navigate('AdminTab')
       }
       else{
-        // navigation.navigate('Home')
         navigation.navigate('UserTab')
       }
     }
@@ -65,11 +64,10 @@ const Login = ({navigation}) => {
           </TouchableOpacity>
           <View>
             <Text style={styles.linkLogin}>
-              Don’t have an account?
+              Don't have an account?
               <Text
                 style={{color: '#61B846'}}
                 onPress={() => navigation.navigate('Signup')}>
-                {' '}
                 Register
               </Text>
             </Text>
@@ -115,6 +113,7 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   button: {
+    width: '50%',
     paddingVertical: 10,
     paddingHorizontal: 35,
     backgroundColor: '#61B846',
