@@ -2,8 +2,13 @@ import { useState, useEffect } from 'react'
 import { View, Text, ScrollView, TextInput, StyleSheet, TouchableOpacity, Image, FlatList, ToastAndroid, Pressable } from 'react-native'
 import { icons, images, baseUrl } from '../constants'
 import axios from 'axios'
+import { useDispatch, useSelector } from 'react-redux'
+import { addToCart } from '../redux/cartReducer'
 
 const Home = ({navigation}) => {
+
+  const dispatch = useDispatch()
+  const cartProducts = useSelector(state => state.cart.products)
 
   const [category, setCategory] = useState([])
   const [products, setProducts] = useState([])
@@ -24,7 +29,7 @@ const Home = ({navigation}) => {
 
   const renderItem = ({item}) => {
     return (
-      <Pressable onPressIn={()=> addToCart(item.categoryName)}>
+      <Pressable onPress={()=> ToastAndroid.show(item.categoryName, ToastAndroid.SHORT)}>
         <View style={styles.categoriesContent}>
           <Image
             style={styles.categoryImage}
@@ -38,8 +43,18 @@ const Home = ({navigation}) => {
     )
   }
 
-  const addToCart = (itemID) => {
-    ToastAndroid.show(itemID, ToastAndroid.SHORT)
+  const addToCartItem = (item) => {
+    let obj = {}
+    ToastAndroid.show('Item Added to Cart', ToastAndroid.SHORT)
+    console.log(item)
+    obj['id'] = item._id
+    obj['name'] = item.productName
+    obj['img'] = item.productImg
+    obj['price'] = item.price
+    obj['quantity'] = 1
+    obj['size'] = item.productSize
+    obj['unit'] = item.unit
+    dispatch(addToCart(obj))
   }
 
   return (
@@ -56,7 +71,7 @@ const Home = ({navigation}) => {
                 style={{ width: 25, height: 25, alignContent: 'center' }}
                 source={icons.basket}
               />
-              </Pressable>
+            </Pressable>
           </View>
         </View>
         <ScrollView>
@@ -66,7 +81,7 @@ const Home = ({navigation}) => {
             </View>
             <View style={styles.inputView}>
               <Image
-                style={{ width: 20, height: 20, marginRight: 10 }}
+                style={{ width: 16, height: 16, marginRight: 10 }}
                 source={icons.search_icon}
               />
               <TextInput placeholder="Search by Product Name" style={styles.inputBox} />
@@ -101,11 +116,11 @@ const Home = ({navigation}) => {
                   </View>
                   <View style={styles.right}>
                     <Text style={styles.price}>
-                      {item.price} - per {item.unit}
+                      Rs. {item.price}/{item.unit}
                     </Text>
                     <TouchableOpacity 
                       style={styles.btn}
-                      onPressIn={() => addToCart(item._id)}
+                      onPress={() => addToCartItem(item)}
                     >
                       <Text style={styles.btnText}>+</Text>
                     </TouchableOpacity>
@@ -132,8 +147,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderBottomColor: '#E8E8E8',
     borderBottomWidth: 1,
-    paddingTop: 10,
-    paddingBottom: 5,
+    paddingVertical: 5,
     paddingHorizontal: 15,
   },
   heading: {
@@ -159,10 +173,11 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     backgroundColor: '#E8E8E8',
     paddingHorizontal: 20,
+    height: 40
   },
   inputBox: {
     color: '#6d6e71',
-    fontSize: 17,
+    fontSize: 15,
     paddingRight: 30,
   },
   categoryView:{
