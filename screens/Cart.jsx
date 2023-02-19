@@ -1,13 +1,21 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { View, Text, ScrollView, KeyboardAvoidingView, TextInput, StyleSheet, TouchableOpacity, Image, ToastAndroid, Pressable } from 'react-native'
 import { icons, baseUrl } from '../constants'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { resetCart, increaseQuantity, decreaseQuantity } from '../redux/cartReducer'
 
-const Cart = () => {
+const Cart = ({navigation}) => {
 
+  const [name, setName] = useState('Name')
+  const [email, setEmail] = useState('email@mail.com')
+  const [contact, setContact] = useState('03011234567')
+  const [address, setAddress] = useState('This is Address')
+  const [error, setError] = useState('')
+
+  const { userID } = useSelector(state => state.user.userInfo)
   const cartProducts = useSelector(state => state.cart.products)
+
   const dispatch = useDispatch()
 
   const totalPrice = () => {
@@ -16,6 +24,39 @@ const Cart = () => {
       total += product.price * product.quantity
     }
     return total
+  }
+
+  const placeOrder = async () => {
+    if(!name.match(/([^\s])/) || !email.match(/([^\s])/) || !contact.match(/([^\s])/) || !address.match(/([^\s])/)){
+      return setError("All Fields are required")
+    }
+    setError("")
+    ToastAndroid.show('Placing Order', ToastAndroid.SHORT)
+    const body = {
+      orderInfo:
+        cartProducts.map(product => (
+          {
+            productName: product.name,
+            productQuantity: product.quantity.toString(),
+            productPrice: product.price
+          }
+        )
+      ),
+      totalCost: totalPrice(),
+      userID: userID,
+      contactInfo: {
+        fullName: name,
+        email,
+        mobileNo: contact,
+        address
+      }
+    }
+    const res = await axios.post(`${baseUrl}/api/order/new `, body)
+    if(res.data.success){
+      navigation.navigate('Account', { render: Math.random().toFixed(3) })
+      dispatch(resetCart())
+    }
+    else return setError(res.data.error)
   }
 
   return (
@@ -35,7 +76,6 @@ const Cart = () => {
             </Pressable>
           </View>
         </View>
-
         {cartProducts.length ? 
           <ScrollView>
             <View style={{ paddingHorizontal: 15 }}>
@@ -85,25 +125,25 @@ const Cart = () => {
                 <Text style={styles.totalPrice}>PKR {totalPrice()}</Text>
               </View>
               <KeyboardAvoidingView style={styles.customerInfo}>
+                {error && <View style={{justifyContent: 'center', alignItems: 'center'}}><Text  style={styles.errorMessage}>{error}</Text></View>}
                 <TextInput
                   placeholder="Full Name"
-                  // value={email}
-                  // onChangeText={text => setEmail(text)}
+                  value={name}
+                  onChangeText={text => setName(text)}
                   style={styles.input}
                   enterKeyHint="next"
                 />
                 <TextInput
                   placeholder="Email"
-                  // value={email}
-                  // onChangeText={text => setEmail(text)}
+                  value={email}
+                  onChangeText={text => setEmail(text)}
                   style={styles.input}
                   enterKeyHint="next"
                 />
                 <TextInput
-                  
                   placeholder="Phone Number"
-                  // value={email}
-                  // onChangeText={text => setEmail(text)}
+                  value={contact}
+                  onChangeText={text => setContact(text)}
                   style={styles.input}
                   enterKeyHint="next"
                   inputmode="tel"
@@ -111,13 +151,13 @@ const Cart = () => {
                 <TextInput
                   placeholder="Shipping Address"
                   multiline={true}
-                  // value={email}
-                  // onChangeText={text => setEmail(text)}
+                  value={address}
+                  onChangeText={text => setAddress(text)}
                   style={styles.input}
                   enterKeyHint="next"
                 />
               </KeyboardAvoidingView>
-              <TouchableOpacity style={styles.btn}>
+              <TouchableOpacity onPress={placeOrder} style={styles.btn}>
                 <Text style={styles.btnText}>
                   Place Order
                 </Text>
@@ -166,6 +206,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 3,
     paddingBottom: 10,
     marginBottom: 10,
+  },
+  errorMessage:{
+    maxWidth: '70%',
+    color: '#d81c03',
+    fontWeight: 500,
+    letterSpacing: 0.4,
+    fontSize: 18,
   },
   productContainer: {
     flexDirection: 'row',
@@ -235,7 +282,6 @@ const styles = StyleSheet.create({
     color: '#61B846',
   },
   input: {
-    // width: 228,
     margin: 5,
     borderBottomWidth: 1,
     borderBottomColor: '#D4D3D3',
@@ -244,7 +290,7 @@ const styles = StyleSheet.create({
   },
   btn: {
     marginTop: 15,
-    margiBottom: 5,
+    marginBottom: 10,
     paddingVertical: 10,
     backgroundColor: '#61B846',
     justifyContent: 'center',
@@ -259,7 +305,5 @@ const styles = StyleSheet.create({
     fontWeight: 600,
   },
 })
-
-
 
 export default Cart

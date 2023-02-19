@@ -1,4 +1,3 @@
-import React from 'react'
 import { Text } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native'
@@ -31,7 +30,7 @@ function App() {
             screenOptions={{
               headerShown: false
             }}
-            initialRouteName={'UserTab'}
+            initialRouteName={'Login'}
           >
             <Stack.Screen name='Splash' component={Splash} />
             <Stack.Screen name='Login' component={Login} />

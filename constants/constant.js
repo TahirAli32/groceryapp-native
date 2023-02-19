@@ -1,4 +1,4 @@
-const baseUrl = "https://smit-hackathon-backend.cyclic.app"
+const baseUrl = "https://groceryapp-backend.cyclic.app"
 
 const colors = {
   // primary: "#FC6D3F", // orange

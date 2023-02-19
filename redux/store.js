@@ -1,5 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import cartReducer from './cartReducer'
+import authReducer from './authReducer'
+import userReducer from './userReducer'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
   persistStore,
@@ -18,11 +20,14 @@ const persistConfig = {
   storage: AsyncStorage,
 }
 
-const persistedReducer = persistReducer(persistConfig, cartReducer)
+const cartPersistedReducer = persistReducer(persistConfig, cartReducer)
+const authPersistedReducer = persistReducer(persistConfig, authReducer)
 
 export const store = configureStore({
   reducer: {
-    cart: persistedReducer
+    cart: cartPersistedReducer,
+    auth: authPersistedReducer,
+    user: userReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

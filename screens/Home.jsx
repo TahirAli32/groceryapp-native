@@ -2,13 +2,12 @@ import { useState, useEffect } from 'react'
 import { View, Text, ScrollView, TextInput, StyleSheet, TouchableOpacity, Image, FlatList, ToastAndroid, Pressable } from 'react-native'
 import { icons, images, baseUrl } from '../constants'
 import axios from 'axios'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { addToCart } from '../redux/cartReducer'
 
 const Home = ({navigation}) => {
 
   const dispatch = useDispatch()
-  const cartProducts = useSelector(state => state.cart.products)
 
   const [category, setCategory] = useState([])
   const [products, setProducts] = useState([])
@@ -46,7 +45,6 @@ const Home = ({navigation}) => {
   const addToCartItem = (item) => {
     let obj = {}
     ToastAndroid.show('Item Added to Cart', ToastAndroid.SHORT)
-    console.log(item)
     obj['id'] = item._id
     obj['name'] = item.productName
     obj['img'] = item.productImg
