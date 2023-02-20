@@ -7,7 +7,7 @@ import {
   ToastAndroid,
   View,
 } from 'react-native'
-import React, {useState} from 'react'
+import { useState } from 'react'
 import axios from 'axios'
 import { baseUrl } from '../constants'
 
@@ -27,7 +27,7 @@ const Signup = ({navigation}) => {
     ToastAndroid.show('Processing Request', ToastAndroid.SHORT)
     const body = {
       name,
-      email,
+      email: email.toLowerCase(),
       password,
       mobileNo: contact,
     }

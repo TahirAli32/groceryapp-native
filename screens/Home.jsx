@@ -1,9 +1,20 @@
+import { 
+  View,
+  Text,
+  ScrollView,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  FlatList,
+  ToastAndroid,
+  Pressable
+} from 'react-native'
 import { useState, useEffect } from 'react'
-import { View, Text, ScrollView, TextInput, StyleSheet, TouchableOpacity, Image, FlatList, ToastAndroid, Pressable } from 'react-native'
-import { icons, images, baseUrl } from '../constants'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
-import { addToCart } from '../redux/cartReducer'
+import { icons, images, baseUrl } from '../constants'
+import { addToCart } from '../redux'
 
 const Home = ({navigation}) => {
 

@@ -11,13 +11,12 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { baseUrl } from '../constants'
 import { useDispatch, useSelector } from 'react-redux'
-import { authSuccessful } from '../redux/authReducer'
-import { saveUserInfo } from '../redux/userReducer'
+import { authSuccessful, saveUserInfo } from '../redux' 
 
 const Login = ({navigation}) => {
 
-  const [email, setEmail] = useState('test@gmail.com')
-  const [password, setPassword] = useState('password')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
   const authToken = useSelector(state => state.auth.authToken)
@@ -49,7 +48,7 @@ const Login = ({navigation}) => {
     }
     setError("")
     ToastAndroid.show('Validating Credentials', ToastAndroid.SHORT)
-    const res = await axios.post(`${baseUrl}/api/auth/login`, { email, password })
+    const res = await axios.post(`${baseUrl}/api/auth/login`, { email: email.toLowerCase(), password })
     if(res.data.success){
       ToastAndroid.show('Login Successfull', ToastAndroid.SHORT)
       dispatch(saveUserInfo({

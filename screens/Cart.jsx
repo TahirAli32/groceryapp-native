@@ -1,9 +1,20 @@
+import {
+  View,
+  Text,
+  ScrollView,
+  KeyboardAvoidingView,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ToastAndroid,
+  Pressable
+} from 'react-native'
 import { useState } from 'react'
-import { View, Text, ScrollView, KeyboardAvoidingView, TextInput, StyleSheet, TouchableOpacity, Image, ToastAndroid, Pressable } from 'react-native'
-import { icons, baseUrl } from '../constants'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
-import { resetCart, increaseQuantity, decreaseQuantity } from '../redux/cartReducer'
+import { icons, baseUrl } from '../constants'
+import { resetCart, increaseQuantity, decreaseQuantity } from '../redux'
 
 const Cart = ({navigation}) => {
 
@@ -46,7 +57,7 @@ const Cart = ({navigation}) => {
       userID: userID,
       contactInfo: {
         fullName: name,
-        email,
+        email: email.toLowerCase(),
         mobileNo: contact,
         address
       }

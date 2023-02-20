@@ -1,12 +1,17 @@
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  Image
+} from 'react-native'
 import { useState, useEffect } from 'react'
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native'
-import { images, baseUrl } from '../constants'
 import axios from 'axios'
 import moment from 'moment'
 import { useDispatch, useSelector } from 'react-redux'
-import { logoutSuccessful } from '../redux/authReducer'
-import { resetCart } from '../redux/cartReducer'
-import { deleteUserInfo } from '../redux/userReducer'
+import { images, baseUrl } from '../constants'
+import { logoutSuccessful, resetCart, deleteUserInfo } from '../redux'
 
 const UserSetting = ({ navigation, route }) => {
 
