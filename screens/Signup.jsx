@@ -65,6 +65,7 @@ const Signup = ({navigation}) => {
           value={contact}
           onChangeText={text => setContact(text)}
           style={styles.input}
+          keyboardType='numeric'
         />
         <TextInput
           placeholder="Password"

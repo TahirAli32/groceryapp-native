@@ -195,16 +195,13 @@ const styles = StyleSheet.create({
     color: '#61B846',
   },
   btn: {
-    marginTop: 10,
-    marginBottom: 10,
-    paddingVertical: 10,
-    marginHorizontal: 20,
-    backgroundColor: '#61B846',
     justifyContent: 'center',
-    alignContent: 'center',
-    borderRadius: 10,
     alignItems: 'center',
-    justifyContent: 'center'
+    marginVertical: 10,
+    marginHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 10,
+    backgroundColor: '#61B846',
   },
   btnText: {
     color: '#fff',

@@ -135,29 +135,26 @@ const Cart = ({navigation}) => {
                 <Text style={styles.totalText}>Total</Text>
                 <Text style={styles.totalPrice}>PKR {totalPrice()}</Text>
               </View>
-              <KeyboardAvoidingView style={styles.customerInfo}>
+              <KeyboardAvoidingView>
                 {error && <View style={{justifyContent: 'center', alignItems: 'center'}}><Text  style={styles.errorMessage}>{error}</Text></View>}
                 <TextInput
                   placeholder="Full Name"
                   value={name}
                   onChangeText={text => setName(text)}
                   style={styles.input}
-                  enterKeyHint="next"
                 />
                 <TextInput
                   placeholder="Email"
                   value={email}
                   onChangeText={text => setEmail(text)}
                   style={styles.input}
-                  enterKeyHint="next"
                 />
                 <TextInput
                   placeholder="Phone Number"
                   value={contact}
                   onChangeText={text => setContact(text)}
                   style={styles.input}
-                  enterKeyHint="next"
-                  inputmode="tel"
+                  keyboardType='numeric'
                 />
                 <TextInput
                   placeholder="Shipping Address"
@@ -165,7 +162,6 @@ const Cart = ({navigation}) => {
                   value={address}
                   onChangeText={text => setAddress(text)}
                   style={styles.input}
-                  enterKeyHint="next"
                 />
               </KeyboardAvoidingView>
               <TouchableOpacity onPress={placeOrder} style={styles.btn}>
