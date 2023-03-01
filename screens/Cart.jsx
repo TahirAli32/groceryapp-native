@@ -18,10 +18,10 @@ import { resetCart, increaseQuantity, decreaseQuantity } from '../redux'
 
 const Cart = ({navigation}) => {
 
-  const [name, setName] = useState('Name')
-  const [email, setEmail] = useState('email@mail.com')
-  const [contact, setContact] = useState('03011234567')
-  const [address, setAddress] = useState('This is Address')
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [contact, setContact] = useState('')
+  const [address, setAddress] = useState('')
   const [error, setError] = useState('')
 
   const { userID } = useSelector(state => state.user.userInfo)

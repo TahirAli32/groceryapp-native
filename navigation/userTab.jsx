@@ -12,6 +12,11 @@ const Tabs = () => {
       screenOptions={{
         // tabBarShowLabel: false,
         headerShown: false,
+        tabBarInActiveTintColor: colors.secondary,
+        tabBarActiveTintColor: colors.primary,
+        tabBarLabelStyle: {
+          fontSize: 12
+        }
       }}
     >
       <Tab.Screen

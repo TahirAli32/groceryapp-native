@@ -1,7 +1,7 @@
 import React from 'react'
 import { Image } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { AdminAllProducts, AddProduct, AdminSetting } from '../screens'
+import { AdminAllProducts, AddProduct, AdminSetting, AdminAllOrders } from '../screens'
 import { colors, icons } from '../constants/'
 
 const Tab = createBottomTabNavigator()
@@ -12,9 +12,10 @@ const Tabs = () => {
       screenOptions={{
         // tabBarShowLabel: false,
         headerShown: false,
-        style:{
-          backgroundColor: 'transparent',
-          borderTopWidth: 0
+        tabBarInActiveTintColor: colors.secondary,
+        tabBarActiveTintColor: colors.primary,
+        tabBarLabelStyle: {
+          fontSize: 12
         }
       }}
     >
@@ -55,6 +56,23 @@ const Tabs = () => {
       <Tab.Screen
         name='Account'
         component={AdminSetting}
+        options={{
+          tabBarIcon: (({focused}) => (
+            <Image 
+              source={icons.user}
+              resizeMode="contain"
+              style={{
+                width: 25,
+                height: 25,
+                tintColor: focused ? colors.primary : colors.secondary
+              }}
+            />
+          )),
+        }}
+      />
+      <Tab.Screen
+        name='Orders'
+        component={AdminAllOrders}
         options={{
           tabBarIcon: (({focused}) => (
             <Image 
