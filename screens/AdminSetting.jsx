@@ -18,7 +18,7 @@ import { logoutSuccessful, resetCart, deleteUserInfo } from '../redux'
 
 const AdminSetting = ({navigation}) => {
 
-  const { userName, profileUrl, userID } = useSelector(state => state.user.userInfo)
+  const { userName, profileUrl } = useSelector(state => state.user.userInfo)
   const dispatch = useDispatch()
 
   const [categories, setCategories] = useState([])
